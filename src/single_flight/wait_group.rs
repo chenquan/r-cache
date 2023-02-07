@@ -68,7 +68,7 @@ mod tests {
     use std::sync::mpsc;
     use std::thread;
     use std::time::Duration;
-    use crate::singleflight::wait_group::WaitGroup;
+    use crate::single_flight::wait_group::WaitGroup;
 
     const THREADS: usize = 10;
 
