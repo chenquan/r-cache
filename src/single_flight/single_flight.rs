@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::sync::Mutex;
-use crate::singleflight::wait_group::WaitGroup;
+use crate::single_flight::wait_group::WaitGroup;
 
 
 #[derive(Clone, Debug)]
@@ -20,7 +20,7 @@ impl<T> Call<T> where T: Clone + Debug {
     }
 }
 
-struct Group<T> where T: Clone + Debug {
+pub struct Group<T> where T: Clone + Debug {
     m: Mutex<HashMap<String, Box<Call<T>>>>,
 }
 
@@ -32,11 +32,11 @@ impl<T> Default for Group<T> where T: Clone + Debug {
 
 
 impl<T> Group<T> where T: Clone + Debug {
-    fn new() -> Group<T> {
+    pub fn new() -> Group<T> {
         Group::default()
     }
 
-    fn do_fn<F>(&self, key: &str, func: F) -> Option<T>
+    pub fn do_fn<F>(&self, key: &str, func: F) -> Option<T>
         where F: Fn() -> Option<T>, {
         let mut m = self.m.lock().unwrap();
 
@@ -72,7 +72,7 @@ mod tests {
 
     #[test]
     fn test_simple() {
-        let g: Group<usize> = Group::new();
+        let g = Group::<usize>::new();
         let res = g.do_fn("key", || Option::from(RESULT));
         assert_eq!(res.unwrap(), RESULT);
     }

@@ -1,5 +1,5 @@
 mod cache;
-mod singleflight;
+mod single_flight;
 mod group;
 
 fn main() {
